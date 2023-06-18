@@ -61,6 +61,13 @@ function Form() {
   );
 }
 
+/**
+ * The function returns a list of items using initialItems array.
+ * @returns A React component called `PackingList` is being returned. It renders a `div` element with a
+ * class name of "list" and an unordered list (`ul`) element. The list items are generated using the
+ * `initialItems` array and the `map` method, which creates a new array of `Item` components with each
+ * item in the `initialItems` array passed as a prop
+ */
 function PackingList() {
   return (
     <div className="list">

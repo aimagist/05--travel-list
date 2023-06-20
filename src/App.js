@@ -1,17 +1,23 @@
 import {useState} from "react";
 
-const initialItems = [
-  {id: 1, description: "Pasaporte", quantity: 1, packed: false},
-  {id: 2, description: "Pares de medias", quantity: 12, packed: true},
-  {id: 3, description: "Cargador", quantity: 12, packed: false},
-];
+// const initialItems = [
+//   {id: 1, description: "Pasaporte", quantity: 1, packed: false},
+//   {id: 2, description: "Pares de medias", quantity: 12, packed: true},
+//   {id: 3, description: "Cargador", quantity: 12, packed: false},
+// ];
 
 export default function App() {
+  const [items, setItems] = useState([]);
+
+  const handleAddItem = (item) => {
+    setItems((items) => [...items, item]);
+  };
+
   return (
     <div className="app">
       <Logo />
-      <Form />
-      <PackingList />
+      <Form onAddItems={handleAddItem} />
+      <PackingList items={items} />
       <Stats />
     </div>
   );
@@ -21,7 +27,7 @@ function Logo() {
   return <h1>❌ Me voy del país ✈️</h1>;
 }
 
-function Form() {
+function Form({onAddItems}) {
   const [description, setDescription] = useState("");
   const [qty, setQty] = useState(1);
 
@@ -36,6 +42,9 @@ function Form() {
       id: Date.now(),
     };
     console.log(newItem);
+
+    onAddItems(newItem);
+
     setDescription("");
     setQty(1);
   };
@@ -61,18 +70,12 @@ function Form() {
   );
 }
 
-/**
- * The function returns a list of items using initialItems array.
- * @returns A React component called `PackingList` is being returned. It renders a `div` element with a
- * class name of "list" and an unordered list (`ul`) element. The list items are generated using the
- * `initialItems` array and the `map` method, which creates a new array of `Item` components with each
- * item in the `initialItems` array passed as a prop
- */
-function PackingList() {
+function PackingList({items}) {
+  console.log(items);
   return (
     <div className="list">
       <ul>
-        {initialItems.map((item) => (
+        {items.map((item) => (
           <Item item={item} key={item.id} />
         ))}
       </ul>

@@ -74,7 +74,7 @@ function Form({onAddItems}) {
 }
 
 function PackingList({items, onDeleteItem}) {
-  console.log(items);
+  // console.log(items);
   return (
     <div className="list">
       <ul>

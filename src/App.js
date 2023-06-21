@@ -2,7 +2,7 @@ import {useState} from "react";
 
 // const initialItems = [
 //   {id: 1, description: "Pasaporte", quantity: 1, packed: false},
-//   {id: 2, description: "Pares de medias", quantity: 12, packed: true},
+//   {id: 2, description: "Pares de medias", quantity: 12, packed: false},
 //   {id: 3, description: "Cargador", quantity: 12, packed: false},
 // ];
 
@@ -25,6 +25,13 @@ export default function App() {
     );
   };
 
+  const handleClearList = () => {
+    const response = window.confirm(
+      "Esta acción va a reiniciar la lista. Confirmás esta operación?"
+    );
+    if (response) setItems([]);
+  };
+
   return (
     <div className="app">
       <Logo />
@@ -33,6 +40,7 @@ export default function App() {
         items={items}
         onDeleteItem={handleDeleteItem}
         onToggleItem={handleToggleItem}
+        onClearList={handleClearList}
       />
       <Stats items={items} />
     </div>
@@ -85,12 +93,27 @@ function Form({onAddItems}) {
   );
 }
 
-function PackingList({items, onDeleteItem, onToggleItem}) {
+function PackingList({items, onDeleteItem, onToggleItem, onClearList}) {
   // console.log(items);
+  const [sortBy, setSortBy] = useState("packed");
+
+  let sortedItems;
+  if (sortBy === "input") sortedItems = items;
+
+  if (sortBy === "description")
+    sortedItems = items
+      .slice()
+      .sort((a, b) => a.description.localeCompare(b.description));
+
+  if (sortBy === "packed")
+    sortedItems = items
+      .slice()
+      .sort((a, b) => Number(a.packed) - Number(b.packed));
+
   return (
     <div className="list">
       <ul>
-        {items.map((item) => (
+        {sortedItems.map((item) => (
           <Item
             item={item}
             key={item.id}
@@ -99,6 +122,14 @@ function PackingList({items, onDeleteItem, onToggleItem}) {
           />
         ))}
       </ul>
+      <div className="actions">
+        <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+          <option value="input">Ordenar por orden de ingreso</option>
+          <option value="description">Ordenar alfabéticamente</option>
+          <option value="packed">Ordenar por estado</option>
+        </select>
+        <button onClick={onClearList}>Vaciar lista</button>
+      </div>
     </div>
   );
 }
@@ -124,7 +155,7 @@ function Stats({items}) {
   if (!items.length)
     return (
       <p className="stats">
-        <em>Empezá a armar tu lista de equipaje!</em>
+        <em>Empezá a armar tu lista de equipaje! 🐣</em>
       </p>
     );
 

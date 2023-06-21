@@ -100,7 +100,7 @@ const Item = ({item, onDeleteItem}) => {
 
 function Stats() {
   return (
-    <footer className="">
+    <footer>
       <em>X cosas en la lista, ya guardaste X% </em>
     </footer>
   );
